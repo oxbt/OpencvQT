@@ -24,11 +24,6 @@
 
 #include <math.h>
 #include <QWheelEvent>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/core.hpp>
 #pragma execution_character_set("utf-8")
 
 using namespace cv;
@@ -188,7 +183,9 @@ void MainWindow::on_ac_programme_triggered()
             //例如：cv::cvtColor(matOri,dstImage,COLOR_RGB2GRAY);
 
             //灰度直方图处理测试
-
+            Mat gray_plane;
+            cvtColor(matOri,gray_plane,COLOR_BGR2GRAY);
+/* //later
             IplImage *src= &IplImage(matOri);
             IplImage* gray_plane = cvCreateImage(cvGetSize(src),8,1);
             cvCvtColor(src,gray_plane,CV_RGB2GRAY);
@@ -232,7 +229,7 @@ void MainWindow::on_ac_programme_triggered()
             cvShowImage( "H-S Histogram", hist_image );
 
             dstImage=cvarrToMat(hist_image);//IplImage转Mat
-
+*/
 
 
 
@@ -313,7 +310,7 @@ void MainWindow::on_ac_programme_triggered()
             ///
             ///
 
-            Mat src3=cvarrToMat(gray_plane);
+            Mat src3=gray_plane;
             Mat dst;
 
             double thresh = 150;
@@ -416,7 +413,7 @@ void MainWindow::on_ac_openfile_triggered()
     std::string path = str.toLocal8Bit().toStdString(); //opencv加载中文问题关键是这个
     Mat pImgs=imread(path,1 );//cv函数创建Mat
 
-    cvtColor(pImgs,pImgs,CV_BGR2RGB);//opencv Mat一般是bgr格式需要转换成rgb
+    cvtColor(pImgs,pImgs,COLOR_BGR2RGB);//opencv Mat一般是bgr格式需要转换成rgb
 
     QString  str1="原始图";//操作名
 
@@ -1468,7 +1465,7 @@ void MainWindow::on_ac_demo_triggered()
             ///
 //            IplImage *src= &IplImage(matOri);
 //            IplImage* gray_plane = cvCreateImage(cvGetSize(src),8,1);
-
+/* //later
             IplImage *src_back2 = 0;
 
             IplImage *src2= &IplImage(matOri);
@@ -1480,7 +1477,7 @@ void MainWindow::on_ac_demo_triggered()
             IplConvKernel *element = 0; //定义形态学结构指针
 
             //1.读取和显示图像
-            //    /* the first command line parameter must be image file name */
+            //     the first command line parameter must be image file name
             //            src = cvLoadImage("D:/ImageTest/rice.png", 0);
             src = cvLoadImage("D:/ImageTest/1.bmp", 0);
 
@@ -1508,7 +1505,7 @@ void MainWindow::on_ac_demo_triggered()
 
 
             dstImage=cvarrToMat(src_back2);//转化语句
-
+*/
             QString sendstrg=QString("code(%1,%2);//输入：%1，输出：%2\r\n")
                     .arg(inImgDlgVar).arg(outImgDlgVar);
 

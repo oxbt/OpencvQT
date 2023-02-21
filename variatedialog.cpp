@@ -56,8 +56,8 @@ VariateDialog::VariateDialog(QString title,
 
     // 只能输入英文和数字
     // QRegExp regx("[a-zA-Z0-9]+$");
-    QRegExp regx("^[a-zA-Z][a-zA-Z0-9_]*$");//开头必须英文
-    QValidator *validator = new QRegExpValidator(regx,this);
+    QRegularExpression regx("^[a-zA-Z][a-zA-Z0-9_]*$");//开头必须英文
+    QValidator *validator = new QRegularExpressionValidator(regx,this);
     lineEdit1->setValidator(validator);
     //不能重复变量
 
@@ -118,8 +118,8 @@ VariateDialog::VariateDialog(QString title,
         layouts->addWidget(lineEditVar1,5,2,1,1);       
 
         //只能输入整数
-        QRegExp rx("^-?\\d+$");
-        QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+        QRegularExpression rx("^-?\\d+$");
+        QValidator *pReg = new QRegularExpressionValidator(rx, this);
         lineEditVar1->setValidator(pReg);       
         connect(lineEditVar1,SIGNAL(textChanged(QString)),this,SLOT(getLineEdit1(QString)));
     }
@@ -134,9 +134,9 @@ VariateDialog::VariateDialog(QString title,
         layouts->addWidget(lineEditVar1,5,2,1,1);
 
 
-        //限制浮点数输入范围为[-999999.9999,999999.9999]
-        QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,4})?$|(^\\t?$)");
-        QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+        //限制浮点数输入范围为[-999999.9999,999999.9999]        
+        QRegularExpression rx("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,4})?$|(^\\t?$)");
+        QValidator *pReg = new QRegularExpressionValidator(rx, this);
         lineEditVar1->setValidator(pReg);
         connect(lineEditVar1,SIGNAL(textChanged(QString)),this,SLOT(getLineEdit1(QString)));
 
@@ -171,9 +171,9 @@ VariateDialog::VariateDialog(QString title,
         layouts->addWidget(labNameVar2,6,1,1,1);
         layouts->addWidget(lineEditVar2,6,2,1,1);
 
-        //只能输入整数
-        QRegExp rx("^-?\\d+$");
-        QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+        //只能输入整数        
+        QRegularExpression rx("^-?\\d+$");
+        QValidator *pReg = new QRegularExpressionValidator(rx, this);
         lineEditVar2->setValidator(pReg);
         connect(lineEditVar2,SIGNAL(textChanged(QString)),this,SLOT(getLineEdit2(QString)));
     }
@@ -189,9 +189,9 @@ VariateDialog::VariateDialog(QString title,
         layouts->addWidget(lineEditVar2,6,2,1,1);
 
 
-        //限制浮点数输入范围为[-999999.9999,999999.9999]
-        QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,4})?$|(^\\t?$)");
-        QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+        //限制浮点数输入范围为[-999999.9999,999999.9999]        
+        QRegularExpression rx("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,4})?$|(^\\t?$)");
+        QValidator *pReg = new QRegularExpressionValidator(rx, this);
         lineEditVar2->setValidator(pReg);
         connect(lineEditVar2,SIGNAL(textChanged(QString)),this,SLOT(getLineEdit2(QString)));
     }
@@ -228,9 +228,9 @@ VariateDialog::VariateDialog(QString title,
         layouts->addWidget(labNameVar3,7,1,1,1);
         layouts->addWidget(lineEditVar3,7,2,1,1);
 
-        //只能输入整数
-        QRegExp rx("^-?\\d+$");
-        QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+        //只能输入整数        
+        QRegularExpression rx("^-?\\d+$");
+        QValidator *pReg = new QRegularExpressionValidator(rx, this);
         lineEditVar3->setValidator(pReg);
         connect(lineEditVar3,SIGNAL(textChanged(QString)),this,SLOT(getLineEdit3(QString)));
     }
@@ -246,9 +246,9 @@ VariateDialog::VariateDialog(QString title,
         layouts->addWidget(lineEditVar3,7,2,1,1);
 
 
-        //限制浮点数输入范围为[-999999.9999,999999.9999]
-        QRegExp rx("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,4})?$|(^\\t?$)");
-        QRegExpValidator *pReg = new QRegExpValidator(rx, this);
+        //限制浮点数输入范围为[-999999.9999,999999.9999]        
+        QRegularExpression rx("^(-?[0]|-?[1-9][0-9]{0,5})(?:\\.\\d{1,4})?$|(^\\t?$)");
+        QValidator *pReg = new QRegularExpressionValidator(rx, this);
         lineEditVar3->setValidator(pReg);
         connect(lineEditVar3,SIGNAL(textChanged(QString)),this,SLOT(getLineEdit3(QString)));
     }

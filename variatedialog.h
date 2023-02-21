@@ -13,12 +13,9 @@
 
 #include <math.h>
 #include <QWheelEvent>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/core.hpp>
 
+#include "opencv2/opencv.hpp"
+#include <opencv2/core/types_c.h>
 
 #pragma execution_character_set("utf-8")
 

@@ -94,7 +94,7 @@ void ImageLook::wheelEvent(QWheelEvent *event)
 {
     pixItem->setZoomState(NO_STATE);//枚举，对应pixitem类中
     int scaleValue=pixItem->getScaleValue();//获取ScaleValue值（放大缩小值）
-    if(event->delta() > 0)  //delta（）为正，滚轮向上滚
+    if(event->angleDelta().y() > 0)  //delta（）为正，滚轮向上滚
     {
         scaleValue++;
         ui->horizontalSlider->setValue(scaleValue);//同步滑条

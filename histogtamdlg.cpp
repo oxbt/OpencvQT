@@ -177,45 +177,30 @@ void HistogtamDlg::closeEvent(QCloseEvent *event)
      //dstImage输出图像，最后希望显示的图像必须添加
      //例如：cv::cvtColor(matOri,dstImage,COLOR_RGB2GRAY);
      Mat intoMat=globalMat.clone();
-     IplImage *src= &IplImage(intoMat);
-     IplImage* gray_plane = cvCreateImage(cvGetSize(src),8,1);
-     cvCvtColor(src,gray_plane,CV_RGB2GRAY);
-     //  cv::cvtColor(src,gray_plane,COLOR_RGB2GRAY);
 
-     int hist_size = 256;    //直方图尺寸
-     int hist_height = 256;
+     Mat src = intoMat.clone();
+     Mat gray_plane;
+     cvtColor(src,gray_plane,COLOR_BGR2GRAY);
+
+     const int histSize = 256; //直方图每一个维度划分的柱条的数目
      float range[] = {0,255};  //灰度级的范围
-     float* ranges[]={range};
-     //创建一维直方图，统计图像在[0 255]像素的均匀分布
-     CvHistogram* gray_hist = cvCreateHist(1,&hist_size,CV_HIST_ARRAY,ranges,1);
-     //计算灰度图像的一维直方图
-     cvCalcHist(&gray_plane,gray_hist,0,0);
-     //归一化直方图
-     cvNormalizeHist(gray_hist,1.0);
+     const float* ranges[]={range};
+     Mat gray_hist;
+     calcHist(&gray_plane, 1, 0, Mat(), gray_hist, 1, &histSize, ranges, true, false);//计算直方图
+     normalize(gray_hist,gray_hist);
 
-     int scale = 2;
-     //创建一张一维直方图的“图”，横坐标为灰度级，纵坐标为像素个数（*scale）
-     IplImage* hist_image = cvCreateImage(cvSize(hist_size*scale,hist_height),8,3);
-     cvZero(hist_image);
-     //统计直方图中的最大直方块
-     float max_value = 0;
-     cvGetMinMaxHistValue(gray_hist, 0,&max_value,0,0);
-
-     //分别将每个直方块的值绘制到图中
-     for(int i=0;i<hist_size;i++)
+     int hist_width = 512;    //直方图尺寸
+     int hist_height = 256;
+     int bin_w = cvRound( (double) hist_width/histSize );
+     Mat histImage( hist_height, hist_width, CV_8UC3, Scalar( 0,0,0) );
+     for( int i = 1; i < histSize; i++ )
      {
-         float bin_val = cvQueryHistValue_1D(gray_hist,i); //像素i的概率
-         int intensity = cvRound(bin_val*hist_height/max_value);  //要绘制的高度
-         cvRectangle(hist_image,
-                     cvPoint(i*scale,hist_height-1),
-                     cvPoint((i+1)*scale - 1, hist_height - intensity),
-                     CV_RGB(255,255,255));
+         line( histImage, Point( bin_w*(i-1), hist_height - cvRound(gray_hist.at<float>(i-1)) ),
+               Point( bin_w*(i), hist_height - cvRound(gray_hist.at<float>(i)) ),
+               Scalar( 255, 0, 0), 2, 8, 0  );
      }
 
-
-     //2019.12.8 刷新占内存原因可能是每次移动滑条都要计算一遍直方图导致的,现在看不是直方图导致的
-     Mat outMat=cvarrToMat(hist_image);
-     globalHistMat=outMat;//2019.12.8 获取生成的直方图
+     globalHistMat=histImage;//2019.12.8 获取生成的直方图
 
 //     IplImage* transIplimage = cvCloneImage(&(IplImage) outMat);
 //     cvLine(transIplimage,cvPoint(1*2*(ui->left_horizontalSlider->value()),0),cvPoint(1*2*(ui->left_horizontalSlider->value()),255),CV_RGB(0,255,0),2);
@@ -266,11 +251,11 @@ void HistogtamDlg::closeEvent(QCloseEvent *event)
 
      //2019.12.8 将刷新放在这里
      Mat outMat=globalHistMat.clone();
+     /*  //later
      IplImage* transIplimage = cvCloneImage(&(IplImage) outMat);
      cvLine(transIplimage,cvPoint(1*2*(ui->left_horizontalSlider->value()),0),cvPoint(1*2*(ui->left_horizontalSlider->value()),255),CV_RGB(0,255,0),2);
      cvLine(transIplimage,cvPoint(1*2*(ui->right_horizontalSlider->value()),0),cvPoint(1*2*(ui->right_horizontalSlider->value()),255),CV_RGB(255,0,0),2);
-
-     outMat=cvarrToMat(transIplimage);
+     outMat=cvarrToMat(transIplimage);*/
      QImage imgshow=MatToQImage(outMat);
      ui->histogtam_label->clear();
      imgshow=imgshow.scaled(this->ui->histogtam_label->width(),this->ui->histogtam_label->height(),Qt::KeepAspectRatio);
