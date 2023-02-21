@@ -1,20 +1,18 @@
 ﻿#ifndef SHOWHISTOGTAMRESULT_H
 #define SHOWHISTOGTAMRESULT_H
 
-#include <QWidget>
-#include "histogtamdlg.h"
-
 #include "math.h"
+#include <QOpenGLWidget>
+#include "histogtamdlg.h"
 
 #include "opencv2/opencv.hpp"
 #include <opencv2/core/types_c.h>
-using namespace cv;
 
 namespace Ui {
 class ShowHistogtamResult;
 }
 
-class ShowHistogtamResult : public QWidget
+class ShowHistogtamResult : public QOpenGLWidget
 {
     Q_OBJECT
 
@@ -22,11 +20,11 @@ public:
     explicit ShowHistogtamResult(QWidget *parent = 0);
     ~ShowHistogtamResult();
 
-    void setPicture(Mat);
-    void showHistogtam_Mat(Mat);
+    void setPicture(cv::Mat);
+    void showHistogtam_Mat(cv::Mat);
     void reFresh();
-    Mat source_gray_Mat;
-    Mat resultMat;
+    cv::Mat source_gray_Mat;
+    cv::Mat resultMat;
 
 
 private:
@@ -34,8 +32,8 @@ private:
     void paintEvent(QPaintEvent *);
 
 
-private slots:
-    void receiveHistogtam_Mat(Mat);
+public slots:
+    void receiveHistogtam_Mat(cv::Mat);
 
 };
 #endif // SHOWHISTOGTAMRESULT_H

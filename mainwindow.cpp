@@ -56,26 +56,32 @@ MainWindow::MainWindow(QWidget *parent) :
     codew->show();//显示
 
     //给图元窗口发送信号，将Mat，图像变量名称，操作名称，行号，标记号发送给图元窗口
-    QObject::connect(this,SIGNAL(sendDataMW(Mat,QString,QString,int,int)),myimagelists,SLOT(receiveDataWM(Mat,QString,QString,int,int)));
+    connect(this, &MainWindow::sendDataMW, myimagelists, &MyImageList::receiveDataWM);
     //给图元窗口发送信号，让其刷新数据
-    QObject::connect(this,SIGNAL(sendAction()),myimagelists,SLOT(receiveAction()));
+    connect(this, &MainWindow::sendAction,myimagelists,&MyImageList::receiveAction);
     //图元窗口图片被选中后弹出视图窗口，图元窗口间Mat和变量名返回给主窗口，主窗口再讲变量发给视图窗口
-    QObject::connect(myimagelists,SIGNAL(sendDataList(Mat,QString,QString)),this,SLOT(receiveDataList(Mat,QString,QString)));
+    connect(myimagelists,&MyImageList::sendDataList,this,&MainWindow::receiveDataList);
     //程序流程窗口，将操作函数文本发送给程序流程窗口
     QObject::connect(this,SIGNAL(sendStr(int,QString)),codew,SLOT(receiveStr(int,QString)));//发送到code
 
 
     //灰度直方图信号槽
     his_dlg=new HistogtamDlg;
-    connect(this,SIGNAL(sendDataToHistogtamdlg(QList<QString>,QList<Mat>)),
-            his_dlg,SLOT(receiveDataForHistogtamdlg(QList<QString>,QList<Mat>)));
-    connect(his_dlg,SIGNAL(sendToShowhistogtam(Mat,int,int)),
-            this,SLOT(receiveHistogtamResult(Mat,int,int)));
+    connect(this,&MainWindow::sendDataToHistogtamdlg,
+            his_dlg,&HistogtamDlg::receiveDataForHistogtamdlg);
+    connect(his_dlg,&HistogtamDlg::sendToShowhistogtam,
+            this,&MainWindow::receiveHistogtamResult);
+
+    //处理后图像返回
+    connect(his_dlg,&HistogtamDlg::hdSendDataMW,
+            this,&MainWindow::receiveDataHd);
+    //程序流程窗口，将操作函数文本发送给程序流程窗口
+    connect(his_dlg,&HistogtamDlg::hdSendStr,this,&MainWindow::receiveStrHd);//发送到code
 
 
     //灰度直方图分割结果信号槽
     show_his_image=new ShowHistogtamResult;
-    connect(this,SIGNAL(sendHistogtam_Mat(Mat)),show_his_image,SLOT(receiveHistogtam_Mat(Mat)));
+    connect(this,&MainWindow::sendHistogtam_Mat,show_his_image,&ShowHistogtamResult::receiveHistogtam_Mat);
 
     ////2019.12.7更新
     //给图元窗口发送信号，将Mat，图像变量名称，操作名称，行号，标记号发送给图元窗口
@@ -1290,71 +1296,40 @@ void MainWindow::on_ac_dilate_triggered()
 
 void MainWindow::on_ac_histogram_triggered()
 {
+    qDebug() << "hist dialog:" <<  his_dlg->isVisible();
 
-//    //信号和槽写在这里会导致卡
-//    his_dlg=new HistogtamDlg;
-//    connect(this,SIGNAL(sendDataToHistogtamdlg(QList<QString>,QList<Mat>)),
-//            his_dlg,SLOT(receiveDataForHistogtamdlg(QList<QString>,QList<Mat>)));
-//    connect(his_dlg,SIGNAL(sendToShowhistogtam(Mat,int,int)),
-//            this,SLOT(receiveHistogtamResult(Mat,int,int)));
-//    ////////
-
-        bool flags=false;
-        for(int i=0;i<ui->mdiArea->subWindowList().size();i++)
+    bool flags=false;
+    for(int i=0;i<ui->mdiArea->subWindowList().size();i++)
+    {
+        QString str=ui->mdiArea->subWindowList().at(i)->windowTitle();
+        if(str=="直方图分割")
         {
-            QString str=ui->mdiArea->subWindowList().at(i)->windowTitle();
-            if(str=="直方图分割")
-            {
-                ui->mdiArea->setActiveSubWindow(ui->mdiArea->subWindowList().at(i));
-                flags=true;
-                break;
-            }
+            ui->mdiArea->setActiveSubWindow(ui->mdiArea->subWindowList().at(i));
+            flags=true;
+            break;
         }
+    }
 
-        if(flags==false)
+    if(flags==false)
+    {
+        if(listVariableMainWid.size()!=0)
         {
-            if(listVariableMainWid.size()!=0)
-            {
-
-                his_dlg=new HistogtamDlg;
-                connect(this,SIGNAL(sendDataToHistogtamdlg(QList<QString>,QList<Mat>)),
-                        his_dlg,SLOT(receiveDataForHistogtamdlg(QList<QString>,QList<Mat>)));
-                connect(his_dlg,SIGNAL(sendToShowhistogtam(Mat,int,int)),
-                        this,SLOT(receiveHistogtamResult(Mat,int,int)));
-
-                //处理后图像返回
-                connect(his_dlg,SIGNAL(hdSendDataMW(Mat,QString,QString,int,int)),
-                        this,SLOT(receiveDataHd(Mat,QString,QString,int,int)));
-                //程序流程窗口，将操作函数文本发送给程序流程窗口
-                connect(his_dlg,SIGNAL(hdSendStr(int,QString)),this,SLOT(receiveStrHd(int,QString)));//发送到code
-
-
-
-                ui->mdiArea->addSubWindow(his_dlg);//->resize(550,422);
-                his_dlg->show();
-                emit sendDataToHistogtamdlg(listVariableMainWid,listMatMainWid);
-                his_dlg->refreshSenddata();
-//                  qDebug()<<"ok";//输出计时
-            }
-            else
-            {
-                QMessageBox msg;
-                msg.about(NULL,"信息","无加载图片");
-            }
+            ui->mdiArea->addSubWindow(his_dlg);//->resize(550,422);
+            his_dlg->show();
+            emit sendDataToHistogtamdlg(listVariableMainWid,listMatMainWid);
+           // his_dlg->refreshSenddata();
         }
-
-//    his_dlg->refreshSenddata();
+        else
+        {
+            QMessageBox msg;
+            msg.about(NULL,"信息","无加载图片");
+        }
+    }
 }
 
 
  void MainWindow::receiveHistogtamResult(Mat HistogtamMat,int left_m,int right_m)
  {
-
-//     ///写在这里会卡
-//     show_his_image=new ShowHistogtamResult;
-//     connect(this,SIGNAL(sendHistogtam_Mat(Mat)),show_his_image,SLOT(receiveHistogtam_Mat(Mat)));
-//     ////
-
      bool flags2=false;
      for(int i=0;i<ui->mdiArea->subWindowList().size();i++)
      {
@@ -1370,9 +1345,8 @@ void MainWindow::on_ac_histogram_triggered()
      {
          if(listVariableMainWid.size()!=0)
          {
-
              show_his_image=new ShowHistogtamResult;
-             connect(this,SIGNAL(sendHistogtam_Mat(Mat)),show_his_image,SLOT(receiveHistogtam_Mat(Mat)));
+             connect(this,&MainWindow::sendHistogtam_Mat,show_his_image,&ShowHistogtamResult::receiveHistogtam_Mat);
 
              ui->mdiArea->addSubWindow(show_his_image)->resize(300,300);
              show_his_image->show();

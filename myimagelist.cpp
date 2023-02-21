@@ -5,12 +5,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QStandardItemModel>
-#include "imagelook.h"
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+
 #include <QDebug>
 
-
+using namespace cv;
 #pragma execution_character_set("utf-8")
 
 

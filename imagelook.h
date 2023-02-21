@@ -17,9 +17,6 @@
 
 #include <QString>
 
-using namespace cv;
-
-
 namespace Ui {
 class ImageLook;
 }
@@ -30,7 +27,7 @@ class ImageLook : public QWidget
 public:
     explicit ImageLook(QWidget *parent = 0);
     ~ImageLook();
-    void showImage(Mat,QString,QString);
+    void showImage(cv::Mat,QString,QString);
 
 protected:
     void mousePressEvent(QMouseEvent *e);
@@ -54,8 +51,8 @@ private:
 
     int wt;
     int ht;
-    IplImage *pImg;
-    Mat pImgs;
+    //cv::IplImage *pImg;
+    cv::Mat pImgs;
     QString globNames;
     QString controlNameGlob;
 

@@ -16,8 +16,6 @@
 #include "opencv2/opencv.hpp"
 #include <opencv2/core/types_c.h>
 
-using namespace cv;
-
 //class ImageLook;
 class MyImageList;
 
@@ -46,21 +44,21 @@ public:
 //    int lineInt2;
 
 signals:
-    void sendDataMW(Mat,QString,QString,int,int);  //给图元窗口发送信号，将Mat，图像变量名称，操作名称，行号，标记号发送给图元窗口
+    void sendDataMW(cv::Mat,QString,QString,int,int);  //给图元窗口发送信号，将Mat，图像变量名称，操作名称，行号，标记号发送给图元窗口
     void sendAction();   //给图元窗口发送信号，让其刷新数据
     void sendStr(int,QString);  //程序流程窗口，将操作函数文本发送给程序流程窗口
 
 //    void sendDataToHistogtamdlg(QList<Mat>,QList<QString>,int);
-    void sendDataToHistogtamdlg(QList<QString>,QList<Mat>);
-    void sendHistogtamResult(Mat);
-    void sendHistogtam_Mat(Mat);
+    void sendDataToHistogtamdlg(QList<QString>,QList<cv::Mat>);
+    void sendHistogtamResult(cv::Mat);
+    void sendHistogtam_Mat(cv::Mat);
 
 
 private slots: 
     void mesgbox();
-    void receiveDataList(Mat imageData,QString textData,QString controlName);
-    void receiveHistogtamResult(Mat,int,int);
-    void receiveDataHd(Mat,QString,QString,int,int);//灰度阈值分割处理结果
+    void receiveDataList(cv::Mat imageData,QString textData,QString controlName);
+    void receiveHistogtamResult(cv::Mat,int,int);
+    void receiveDataHd(cv::Mat,QString,QString,int,int);//灰度阈值分割处理结果
     void receiveStrHd(int,QString);//灰度阈值分割处理结果code
 //    void receiveDlg(QString,QString,int,int);
 
@@ -103,9 +101,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    Mat pImgMat;
+    cv::Mat pImgMat;
     QList<QString> listVariableMainWid;//对应图像变量名字
-    QList<Mat> listMatMainWid;//图像数据
+    QList<cv::Mat> listMatMainWid;//图像数据
     QList<QString> listNameMainWid;//图像操作名
     QList<QString> listCodeMainWid;//code流程
     bool saveOffOn;

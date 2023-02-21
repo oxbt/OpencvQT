@@ -1,6 +1,7 @@
 ﻿#include "imagelook.h"
 #include "ui_imagelook.h"
 #include "mainwindow.h"
+using namespace cv;
 
 #pragma execution_character_set("utf-8")
 

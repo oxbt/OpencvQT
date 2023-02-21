@@ -9,6 +9,8 @@
 #include <QGraphicsObject>
 #pragma execution_character_set("utf-8")
 
+using namespace cv;
+
 //构造函数初始化了变量pix
 MyPixItem::MyPixItem(QPixmap *pixmap)
 {

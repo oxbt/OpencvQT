@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QPalette>
+using namespace cv;
 
 #pragma execution_character_set("utf-8")
 
@@ -20,24 +21,12 @@
 ///
 
 ShowHistogtamResult::ShowHistogtamResult(QWidget *parent) :
-    QWidget(parent),
+    QOpenGLWidget(parent),
     ui(new Ui::ShowHistogtamResult)
 {
     ui->setupUi(this);
-
-  ui->show_label->setScaledContents(true);//自动调整为Qlabel大小。
-
-//  QWidget *widget = new QWidget();
-//       widget->setAutoFillBackground(true);
-//       QPalette palette;
-//       QPixmap pixmap(":/Resources/Penguins.jpg");
-//       palette.setBrush(QPalette::Window, QBrush(pixmap));
-//       widget->setPalette(palette);
-//       widget->show();
-
-this->setAutoFillBackground(true);
-
-
+    ui->show_label->setScaledContents(true);//自动调整为Qlabel大小。
+    this->setAutoFillBackground(true);
 }
 
 ShowHistogtamResult::~ShowHistogtamResult()
@@ -49,9 +38,7 @@ void ShowHistogtamResult::showHistogtam_Mat(Mat receive_Mat)
 {
     source_gray_Mat=receive_Mat;
     setPicture(resultMat);
-
 }
-
 
 void ShowHistogtamResult::setPicture(Mat his_Mat)
 {
@@ -75,28 +62,12 @@ void ShowHistogtamResult::setPicture(Mat his_Mat)
         image=imageOriginal;
     }
 
-//    image = image.scaled(this->geometry().size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    image = image.scaled(this->geometry().size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
     QPixmap pixmapCV =QPixmap::fromImage(image);
-//    ui->show_label->setPixmap(pixmapCV);
-//    ui->show_label->setAlignment(Qt::AlignCenter);
-
-
-
-    QPalette palette;
-    palette.setBrush(this->backgroundRole(),
-                     QBrush(pixmapCV.scaled(this->size(),
-                                            Qt::IgnoreAspectRatio,
-                                            Qt::SmoothTransformation)));
-
-    this->setPalette(palette);
+    ui->show_label->setPixmap(pixmapCV);
+    ui->show_label->setAlignment(Qt::AlignCenter);
 
 }
-
-// void HistogtamDlg::closeEvent(QCloseEvent *event)
-// {
-//     //在这里添加你希望执行关闭事件需要处理的事情
-//     //弹出消息框，关闭其他窗口
-// }
 
 void ShowHistogtamResult::paintEvent(QPaintEvent *)
 {
@@ -106,8 +77,6 @@ void ShowHistogtamResult::paintEvent(QPaintEvent *)
     reFresh();
 
 }
-
-
 
 void ShowHistogtamResult::reFresh()
 {

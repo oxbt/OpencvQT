@@ -13,8 +13,6 @@
 #include "opencv2/opencv.hpp"
 #include <opencv2/core/types_c.h>
 
-using namespace cv;
-
 //枚举方便传递
 enum Enum_ZoomState{
     NO_STATE,
