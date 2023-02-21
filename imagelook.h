@@ -1,6 +1,7 @@
 ﻿#ifndef IMAGELOOK_H
 #define IMAGELOOK_H
 
+#include <QOpenGLWidget>
 #include <QWidget>
 #include <QList>
 #include <QPixmap>
@@ -21,7 +22,7 @@ namespace Ui {
 class ImageLook;
 }
 
-class ImageLook : public QWidget
+class ImageLook : public QOpenGLWidget
 {
     Q_OBJECT
 public:

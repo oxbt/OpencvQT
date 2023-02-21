@@ -6,7 +6,7 @@ using namespace cv;
 #pragma execution_character_set("utf-8")
 
 ImageLook::ImageLook(QWidget *parent) :
-    QWidget(parent),
+    QOpenGLWidget(parent),
     ui(new Ui::ImageLook)
 {
     ui->setupUi(this);
@@ -65,8 +65,8 @@ void ImageLook::showImage(Mat matL,QString nameL,QString controlName)
     m_graphicsScene = new QGraphicsScene;  //new 一个新的场景对象
     ui->graphicsView->setSceneRect(-10/2,-10/2,10,10);
     //设置开启滚动条范围，不然即使隐藏了滚动条后还是有滚动效果
-    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//隐藏横向滚动条
-    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//隐藏纵向滚动条
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);//隐藏横向滚动条
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);//隐藏纵向滚动条
     ui->graphicsView->setScene(m_graphicsScene);//添加场景
     m_graphicsScene->addItem(pixItem);//将图元添加到场景中
     pixItem->setPos(0,0);//中心位置
